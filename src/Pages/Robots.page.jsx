@@ -1,13 +1,13 @@
 import Table from 'react-bootstrap/Table';
 import { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 
 export default function RobotsPage() {
   const [robots, setRobots] = useState([]);
   const [detailRobot, setDetailRobot] = useState(null);
 
   const url = "http://localhost:3001/robots";
-  console.log(robots)
 
   useEffect(() => {
     fetch(url)
@@ -17,10 +17,10 @@ export default function RobotsPage() {
 
   return (
     <Row className='mt-5'>
-      <Col xs={6} lg={9}>
+      <Col xs={12} lg={8}>
         <RobotList robots={robots} setDetailRobot={setDetailRobot} />
       </Col>
-      <Col xs={6} lg={3}>
+      <Col xs={12} lg={4}>
         {detailRobot && <RobotDetail robot={detailRobot} />}
       </Col>
     </Row>
@@ -32,10 +32,10 @@ function RobotList({ robots, setDetailRobot }) {
     <Table bordered hover>
       <thead className='table-dark'>
         <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Modelo</th>
-          <th>Empresa fabricante</th>
+          <th><FormattedMessage id="robots-id" /></th>
+          <th><FormattedMessage id="robots-name" /></th>
+          <th><FormattedMessage id="robots-model" /></th>
+          <th><FormattedMessage id="robots-manufacturer" /></th>
         </tr>
       </thead>
       <tbody>
@@ -59,13 +59,18 @@ function ListRow({ robot, setRobot }) {
 }
 
 function RobotDetail({ robot }) {
+  const imgUrl = `https://raw.githubusercontent.com/fai-aher/T34-Wiki-Backup/refs/heads/main/images/robot${robot.id}.png`
+
   return (
-    <div style={{ border: '1px solid #ccc', padding: '16px', width: '250px', backgroundColor: '#e0e0e0'}}>
-      <h3 style={{ padding: '8px', margin: '-16px -16px 10px -16px'}}>{robot.nombre}</h3>
-      <img src={robot.imagen} alt={robot.nombre} style={{ width: '100%', border: '1px solid #ccc' }} />
-      <p><strong>→ Año de Fabricación:</strong> {robot.anioFabricacion}</p>
-      <p><strong>→ Capacidad de Procesamiento:</strong> {robot.capacidadProcesamiento}</p>
-      <p><strong>→ Humor:</strong> {robot.humor}</p>
+    <div className="d-flex flex-column border border-black" style={{ backgroundColor: 'rgba(217, 217, 217, 0.5)' }}>
+      <p className="fw-bold text-center text-xl m-0 mt-3" >{robot.nombre}</p>
+      <img className='mx-auto border border-black' src={imgUrl} alt={robot.nombre} style={{ width: '10em'}} />
+      <div className='px-4'>
+        <p className='m-0 mt-3'><strong><FormattedMessage id="robots-year" /></strong> {robot.añoFabricacion}</p>
+        <p className='m-0'><strong><FormattedMessage id="robots-processing" /></strong> {robot.capacidadProcesamiento}</p>
+        <p className='m-0 mb-3'><strong><FormattedMessage id="robots-humor" /></strong> {robot.humor}</p>
+      </div>
+
     </div>
   );
 }
